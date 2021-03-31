@@ -1,0 +1,25 @@
+
+Header Size =  0x80
+original app_size  0x2224 ( 8740 )
+load_address  0xc000 ( 49152 )
+app_size  0x2224 ( 8740 )
+w0 = 0xcb0022a4
+Security Value  0x10
+w2 =  0x10008080
+addrWord =  0xc000
+versionKeyWord =  0x0
+child0/feature =  0xffffffff
+child1 =  0xffffffff
+crc =   0xb91d4823
+Writing to file  /tmp/arduino_build_776593/Blink.ino_OTA_blob.bin
+testing: /tmp/arduino_build_776593/Blink.ino_OTA_blob.bin
+Header Size =  0x60
+app_size  0x22a4 ( 8868 )
+Writing to file  /tmp/arduino_build_776593/Blink.ino_Wired_OTA_blob.bin
+Image from  0x0  to  0x22a4  will be loaded at 0x20000
+Connecting over serial port /dev/ttyUSB0...
+Fail
+Fail
+Fail
+Tries = 3
+Upload failed
