@@ -1,3 +1,0 @@
-[submodule "TinyML_py/tensorflow-lite"]
-	path = TinyML_py/tensorflow-lite
-	url = https://github.com/yunho0130/tensorflow-lite
