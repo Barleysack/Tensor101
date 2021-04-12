@@ -1,4 +1,4 @@
--아두이노:1.8.10 (Linux), 보드:"SparkFun Edge, 115200 (TensorFlow Conference Versions), 115200, Ambiq Secure Bootloader (Default)"
+아두이노:1.8.10 (Linux), 보드:"SparkFun Edge, 115200 (TensorFlow Conference Versions), 115200, Ambiq Secure Bootloader (Default)"
 
 /home/fine/.arduino15/packages/SparkFun/tools/arm-none-eabi-gcc/8-2018-q4-major/bin/../lib/gcc/arm-none-eabi/8.2.1/../../../../arm-none-eabi/bin/ld: sketch/arduino_audio_provider.cpp.o: in function `(anonymous namespace)::adc_start_dma(tflite::ErrorReporter*)':
 sketch/arduino_audio_provider.cpp:71: undefined reference to `tflite::ErrorReporter::Report(char const*, ...)'
@@ -45,3 +45,5 @@ sketch/recognize_commands.h:62: undefined reference to `tflite::ErrorReporter::R
 sketch/recognize_commands.h:72: undefined reference to `tflite::ErrorReporter::Report(char const*, ...)'
 collect2: error: ld returned 1 exit status
 exit status 1
+
+
