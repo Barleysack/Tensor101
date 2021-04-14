@@ -49,6 +49,7 @@ history = model.fit(X_train, y_train, epochs=5,
                     callbacks=[expon_lr])
 #콜백으로 위쪽 Learning rate별 손실 기록해주는 클래스 호출
 
+
 plt.plot(expon_lr.rates, expon_lr.losses)
 plt.gca().set_xscale('log')
 plt.hlines(min(expon_lr.losses), min(expon_lr.rates), max(expon_lr.rates))
