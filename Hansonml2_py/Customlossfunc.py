@@ -42,3 +42,20 @@ model.compile(loss=huber_fn, optimizer="nadam", metrics=["mae"])
 
 model.fit(X_train_scaled, y_train, epochs=2,
           validation_data=(X_valid_scaled, y_valid))
+
+model.save("my_model_with_a_custom_loss_threshold_2.h5")
+
+def create_huber(threshold=1.0):
+    def huber_fn(y_true, y_pred):
+        error = y_true - y_pred
+        is_small_error = tf.abs(error) < threshold
+        squared_loss = tf.square(error) / 2
+        linear_loss  = threshold * tf.abs(error) - threshold**2 / 2
+        return tf.where(is_small_error, squared_loss, linear_loss)
+    return huber_fn
+    
+
+    model.compile(loss=huber_fn,optimizer="nadam",metrics=['mae'])
+    
+model.fit(X_train_scaled,y_train,epochs=1,
+           validation_data=(X_valid_scaled,y_valid))
