@@ -1,0 +1,35 @@
+input_A = keras.layers.Input(shape=[5], name="wide_input")
+input_B = keras.layers.Input(shape=[6], name="deep_input")
+hidden1 = keras.layers.Dense(30, activation="relu")(input_B)
+hidden2 = keras.layers.Dense(30, activation="relu")(hidden1)
+concat = keras.layers.concatenate([input_A, hidden2])
+output = keras.layers.Dense(1, name="output")(concat)
+aux_output = keras.layers.Dense(1, name="aux_output")(hidden2)
+model = keras.models.Model(inputs=[input_A, input_B], outputs=[output])
+
+
+
+
+class WideAndDeepModel(keras.models.Model):
+    def __init__(self, units=30, activation="relu", **kwargs):
+        super().__init__(**kwargs)
+        self.hidden1 = keras.layers.Dense(units, activation=activation)
+        self.hidden2 = keras.layers.Dense(units, activation=activation)
+        self.main_output = keras.layers.Dense(1)
+        self.aux_output = keras.layers.Dense(1)
+        
+    def call(self, inputs):
+        input_A, input_B = inputs
+        hidden1 = self.hidden1(input_B)
+        hidden2 = self.hidden2(hidden1)
+        concat = keras.layers.concatenate([input_A, hidden2])
+        main_output = self.main_output(concat)
+        aux_output = self.aux_output(hidden2)
+        return main_output, aux_output
+
+model = WideAndDeepModel(30, activation="relu")
+
+여기 어디 print가 찍혀서 빙글빙글 돌까
+
+
+#해결. 그저 한줄에 다 담을 수 없는 정보라서 그랬던 것....
