@@ -5,6 +5,8 @@ import time
 
 
 
+
+
 #반복 훈련에 대한 코드일뿐, 데이터셋의 준비를 추후 다시 알아볼 필요성이 있다.
 
 keras.backend.clear_session()
@@ -15,6 +17,8 @@ l2_reg = keras.regularizers.l2(0.05)
 model = keras.models.Sequential([
     keras.layers.Dense(30, activation="elu", kernel_initializer="he_normal",
                        kernel_regularizer=l2_reg),
+                                  
+
     keras.layers.Dense(1, kernel_regularizer=l2_reg)
 ])
 
@@ -44,10 +48,7 @@ for i in range(1, 50 + 1):
 
 
 
-n_epochs = 5
-batch_size = 32
-n_steps = len(X_train) // batch_size
-optimizer = keras.optimizers.Nadam(lr=0.01)
+
 loss_fn = keras.losses.mean_squared_error
 mean_loss = keras.metrics.Mean()
 metrics = [keras.metrics.MeanAbsoluteError()]
