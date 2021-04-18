@@ -130,7 +130,8 @@ avg_pool = keras.layers.AvgPool2D(pool_size=2)
 
 
 global_avg_pool = keras.layers.GlobalAvgPool2D()
-#특성층 전역에 대한 평균 값 계산. 정보의 파괴를 가져온다. 
-#유용한 점이 있다고 하는데 모르니 @serereuk께 여쭈어보자. 
+#특성층 전역에 대한 평균 값 계산. 모든 특성층 정보의 파괴를 가져온다. 
+#유용한 점이 있다고 하는데 이후 데이터 해석과 과대적합을 피하는데 용이하다고 한다.
+# 이정도면 과대적합을 피하는게 아니라 정답이 아닌것을 학습시키는 수준이 아닌지..? 
 
 global_avg_pool(cropped_images)
