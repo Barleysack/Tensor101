@@ -1,4 +1,3 @@
-
 .vscode/
 os.getcwd()
 __pycache__/
