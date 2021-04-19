@@ -1,0 +1,5 @@
+
+.vscode/
+os.getcwd()
+__pycache__/
+os.path.realpath(__file__)20210416-202900
