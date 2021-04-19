@@ -134,4 +134,6 @@ global_avg_pool = keras.layers.GlobalAvgPool2D()
 #유용한 점이 있다고 하는데 이후 데이터 해석과 과대적합을 피하는데 용이하다고 한다.
 # 이정도면 과대적합을 피하는게 아니라 정답이 아닌것을 학습시키는 수준이 아닌지..? 
 
-global_avg_pool(cropped_images)
+#global_avg_pool(cropped_images)
+#http://yann.lecun.com/exdb/lenet/index.html
+
