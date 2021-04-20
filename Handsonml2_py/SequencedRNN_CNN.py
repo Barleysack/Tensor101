@@ -5,7 +5,9 @@ import numpy as np
 import os
 import matplotlib as mpl
 import matplotlib.pyplot as plt
-#중간 50짜리 세트 만들때 
+#중간 50짜리 세트 만들때 뭐 문제가 있는듯?
+#코랩으로 재시도 요망
+
 mpl.rc('axes', labelsize=14)
 mpl.rc('xtick', labelsize=12)
 mpl.rc('ytick', labelsize=12)
@@ -185,7 +187,12 @@ model = keras.models.Sequential([
     keras.layers.SimpleRNN(20),
     keras.layers.Dense(10)
 ])
-
+#해당 모델을 시퀀스-투-시퀀스로 바꾼다면 모든 층에 return_sequence를 트루로, 이후 모든 타임 스텝에서 출력을 dense에 지정해야 한다. 
+#해당 API는 keras.layers.TimeDistributed(keras.layers.Dense(n))
+#이것은 타임스텝마다 덴스가 독립적으로 적용하고 모델이 벡터가 아닌 시퀀스를 출력한다는 것을 드러낸다. 
+#시퀀스의 개념을 정립할 필요성이 있어 보인다. 
+#현재 컴파일 하면 출력 텐서가 호환되지 않는다고 하는데, 이를 해당 api로 바로잡는다
+#출력이 [배치크기*타임스텝수,출력차원]====> [배치크기, 타임스텝수, 출력차원 ]
 model.compile(loss="mse", optimizer="adam")
 history = model.fit(X_train, Y_train, epochs=20,
                     validation_data=(X_valid, Y_valid))
