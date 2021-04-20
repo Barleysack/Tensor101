@@ -1,7 +1,7 @@
 #메모리, 파워, 컴퓨팅 파워 등등의 문제는 이후 사용할 임베디드 시스템에서 상당히 자주 문제가 된다.
 #똑같은 resnet을 쓰되, 메모리 사용량을 줄여보자.
 #연산량을 줄이면 될까?
-
+#VGG쪽이 ResNet보다 상당히 연산량이 많다는 것을 알게 되었다. 
 import tensorflow as tf 
 from tensorflow import keras
 from sklearn.datasets import load_sample_image
