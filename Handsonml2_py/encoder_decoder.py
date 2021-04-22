@@ -1,6 +1,6 @@
 import tensorflow as tf
 import tensorflow_addons as tfa
-
+from tensorflow import keras
 encoder_inputs = keras.layers.Input(shape=(None),dtype=np.int32)
 decoder_inputs = keras.layers.Input(shape=(None),dtype=np.int32)
 sequence_lengths = keras.layers.Input(shape=[],dtype=np.int32)
@@ -35,4 +35,14 @@ Y_proba = tf.nn.softmax(final_outputs.rnn_output)
 model = keras.Model(inputs=[encoder_inputs, decoder_inputs, sequence_lengths],
 outputs=[Y_proba])
 
-
+#beam width에 해당하는 케이스를 만들어, 첫번째 디코더 스텝에서 모델이 가능한 모든 언어에 대한 
+#추정 확률을 출력함. 최상위에 돌라온 단어를 beam width에 해당하는 모델로 복사하여 각 문장의 다음 단어를 찾음.
+#vocab에 있는 단어의 추정 확률을 출력한다. 
+beam_width = 10#빔 너비 10개...! 
+decoder = tfa.seq2seq.beam_search_decoder.BeamSearchDecoder(
+  cell=decoder_cell, beam_width=beam_width, output_layer=output_layer) #10짜리 Beamsearch 디코더 선언
+  decoder_initial_state = tfa.seq2seq.beam_search_decoder.tile_batch(#각 디코더를 위해 각 인코더의 마지막 상태를 복사
+    encoder_state, multiplier=beam_width)
+  outputs, _, _ = decoder(
+    embedding_decoder, start_tokens=start_tokens, end_token=end_token,
+    initial_state=decoder_initial_state)#시작토큰, 종료토큰, 그리고 이 인코더의 마지막 상태를 디코더에 전달한다.
