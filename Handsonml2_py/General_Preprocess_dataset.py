@@ -2,8 +2,6 @@
 #######Downgraded to 1.19.2
 #######MEM ISSUE AGAIN?#######
 #######이쪽은 내가 어떻게 건들기가 쉽지 않다. 메모리 단에서 에러가 나는데 내가 뭘 하겠는가?
-#######그리고 왜 메모리 할당을 허가해주니 내장그래픽카드가 돌아버리는지?;;
-#######TF.CONFIG.EXPERIMENTAL.SET_MEMORY_GROWTH에서 내가 원하는 그래픽카드를 지정할 수 없나?
 import tensorflow_datasets as tfds
 import tensorflow as tf
 from tensorflow import keras
