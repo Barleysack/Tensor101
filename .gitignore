@@ -2,3 +2,5 @@ __pycache__/
 .vscode/
 os.getcwd()/
 os.path.realpath(__file__)20210416-202900/
+training_checkpoints/
+
