@@ -10,7 +10,7 @@ import numpy as np
 import os
 import io
 import time
-
+import pandas as pd
 
 
 gpus = tf.config.experimental.list_physical_devices('GPU')
@@ -32,18 +32,13 @@ if gpus:
 
 
 
-path_to_zip = tf.keras.utils.get_file(
-    'spa-eng.zip', origin='http://storage.googleapis.com/download.tensorflow.org/data/spa-eng.zip',
-    extract=True)
+path_to_zip =r'C:/Users/Finally/Downloads/'
 
-path_to_file = os.path.dirname(path_to_zip)+"/spa-eng/spa.txt"
+path_to_file = os.path.dirname(path_to_zip)+"/kor-eng/kor.txt"
 
 
 #얘네 써놓은 순서가 조금 틀리다. 한번 돌려보고 다시 적기를 추천. 
-
-"""
-1.특정 문자를 제거함으로써 문장을 정리합니다.
-2.각 문장에 start와 end 토큰을 추가합니다."""   
+#영어용 전처리함수.
 def preprocess_sentence(w):
   w = unicode_to_ascii(w.lower().strip())
 
@@ -54,8 +49,30 @@ def preprocess_sentence(w):
   w = re.sub(r'[" "]+', " ", w)
 
   # (a-z, A-Z, ".", "?", "!", ",")을 제외한 모든 것을 공백으로 대체합니다.
-  w = re.sub(r"[^a-zA-Z?.!,¿]+", " ", w)
+  w = re.sub(r"[^a-zA-Z가-힣?.!,¿]+", " ", w)
 
+  w = w.strip()
+
+  # 모델이 예측을 시작하거나 중단할 때를 알게 하기 위해서
+  # 문장에 start와 end 토큰을 추가합니다.
+  w = '<start> ' + w + ' <end>'
+  return w
+"""
+1.특정 문자를 제거함으로써 문장을 정리합니다.
+2.각 문장에 start와 end 토큰을 추가합니다."""   
+def preprocess_sentence_kr(w):
+  w = unicode_to_ascii(w.lower().strip())
+
+  # 단어와 단어 뒤에 오는 구두점(.)사이에 공백을 생성합니다.
+  # 예시: "he is a boy." => "he is a boy ."
+  # 참고:- https://stackoverflow.com/questions/3645931/python-padding-punctuation-with-white-spaces-keeping-punctuation
+  w = re.sub(r"([?.!,¿])", r" \1 ", w)
+  w = re.sub(r'[" "]+', " ", w)
+
+  # (a-z, A-Z, ".", "?", "!", ",")을 제외한 모든 것을 공백으로 대체합니다.
+  #w = re.sub(r"[^a-zA-Z?.!,¿]+", " ", w)#
+  w = re.sub(r'[ |ㄱ-ㅎ|ㅏ-ㅣ]+', " ", w)
+#한글은 알파벳이 아니지. 그래서 전처리가 불가능했다. 
   w = w.strip()
 
   # 모델이 예측을 시작하거나 중단할 때를 알게 하기 위해서
@@ -85,11 +102,11 @@ def tokenize(lang):
 
 
 def create_dataset(path, num_examples):
-  lines = io.open(path, encoding='UTF-8').read().strip().split('\n')
-
-  word_pairs = [[preprocess_sentence(w) for w in l.split('\t')]  for l in lines[:num_examples]]
-
-  return zip(*word_pairs)
+  data = pd.read_csv(path_to_file, delimiter = "\t")
+  data.columns = ["en", "kor", "cc"]
+  en = [preprocess_sentence(l) for l in data['en']]
+  kr = [preprocess_sentence_kr(l) for l in data['kor']]
+  return en, kr
 
 
 
@@ -104,10 +121,7 @@ def unicode_to_ascii(s):
 
 
 
-en_sentence = u"May I borrow this book?"
-sp_sentence = u"¿Puedo tomar prestado este libro?"
-print(preprocess_sentence(en_sentence))
-print(preprocess_sentence(sp_sentence).encode('utf-8'))
+
 
 #테스트 프린트.
 def load_dataset(path, num_examples=None):
@@ -120,7 +134,7 @@ def load_dataset(path, num_examples=None):
   return input_tensor, target_tensor, inp_lang_tokenizer, targ_lang_tokenizer
 
 # 언어 데이터셋을 아래의 크기로 제한하여 훈련과 검증을 수행합니다.
-num_examples = 30000
+num_examples = 2500
 input_tensor, target_tensor, inp_lang, targ_lang = load_dataset(path_to_file, num_examples)
 
 # 타겟 텐서와 입력 텐서의 최대 길이를 계산합니다.
@@ -136,9 +150,9 @@ input_tensor_train, input_tensor_val, target_tensor_train, target_tensor_val = t
 
 #단어 인덱스와 ID 인덱스 형성. 단어->ID, ID->단어로 매핑된 딕셔너리.
 
-en, sp = create_dataset(path_to_file, None)
+en, kr = create_dataset(path_to_file, None)
 print(en[-1])
-print(sp[-1])
+print(kr[-1])
 
 
 
@@ -400,5 +414,91 @@ for epoch in range(EPOCHS):
   print('Epoch {} Loss {:.4f}'.format(epoch + 1,
                                       total_loss / steps_per_epoch))
   print('Time taken for 1 epoch {} sec\n'.format(time.time() - start))
+
+
+"""훈련된 모델로 번역하기
+평가 함수는 여기서 교사 강요(teacher forcing)를 사용하기 못하는 것을 제외하고는 훈련 루프와 비슷합니다. 각 마지막 시점(time step)에서 이전 
+디코더 인코더의 결과와 은닉 상태(hidden state)를 가진 예측 값을 디코더에 입력합니다.
+모델이 *end 토큰을 예측할 때 예측하는 것을 중지합니다. *.
+그리고 매 마지막 시점(time step)에 대한 어텐션 가중치를 저장합니다.
+노트: 인코더 결과는 하나의 입력에 대해 단 한 번만 계산됩니다."""
+
+def evaluate(sentence):
+  attention_plot = np.zeros((max_length_targ, max_length_inp))
+#초기화.
+  sentence = preprocess_sentence_kr(sentence)
+#전처리된 문장 가져옴. 그 문장 끝에 공백 넣는 그거...
+  inputs = [inp_lang.word_index[i] for i in sentence.split(' ')]
+  #단어 인덱스 별로 문장을 나누어 인풋으로 넣어준다.
+  inputs = tf.keras.preprocessing.sequence.pad_sequences([inputs],
+                                                         maxlen=max_length_inp,
+                                                         padding='post')
+#패딩 시퀀스, 문장 마무리 후 뒷쪽에 패딩으로 각 배치의 크기를 동일시 한다.
+  inputs = tf.convert_to_tensor(inputs)
+#넘파이 배열로 들어온 인덱스를 텐서로 변환. 
+  result = ''
+
+  hidden = [tf.zeros((1, units))]
+  enc_out, enc_hidden = encoder(inputs, hidden)
+#인코더에서 출력되는 인코더 출력 값과 은닉층 결과값. 
+  dec_hidden = enc_hidden
+  dec_input = tf.expand_dims([targ_lang.word_index['<start>']], 0)
+#디코딩을 <start> 부터 시작할거라 이말인듯
+  for t in range(max_length_targ):
+    predictions, dec_hidden, attention_weights = decoder(dec_input,
+                                                         dec_hidden,
+                                                         enc_out)
+
+    # 나중에 어텐션 가중치를 시각화하기 위해 어텐션 가중치를 저장합니다.
+    attention_weights = tf.reshape(attention_weights, (-1, ))
+    #어텐션 가중치를 저장.
+    attention_plot[t] = attention_weights.numpy()
+#그걸로 넘파이 배열 작성.
+    predicted_id = tf.argmax(predictions[0]).numpy()
+#아마 가장 확률 높은 인덱스를 predicted id에 저장하는듯
+    result += targ_lang.index_word[predicted_id] + ' '
+#결과는 타겟 단어의 인덱스를 내보이도록.
+    if targ_lang.index_word[predicted_id] == '<end>':
+      return result, sentence, attention_plot
+#디코딩중 <end>를 만나면 예측을 종료한다.
+    # 예측된 ID를 모델에 다시 피드합니다.
+    dec_input = tf.expand_dims([predicted_id], 0)
+
+  return result, sentence, attention_plot
+
+
+# 어텐션 가중치를 그리기 위한 함수입니다.
+def plot_attention(attention, sentence, predicted_sentence):
+  fig = plt.figure(figsize=(10,10))
+  ax = fig.add_subplot(1, 1, 1)
+  ax.matshow(attention, cmap='viridis')
+
+  fontdict = {'fontsize': 14}
+
+  ax.set_xticklabels([''] + sentence, fontdict=fontdict, rotation=90)
+  ax.set_yticklabels([''] + predicted_sentence, fontdict=fontdict)
+
+  ax.xaxis.set_major_locator(ticker.MultipleLocator(1))
+  ax.yaxis.set_major_locator(ticker.MultipleLocator(1))
+
+  plt.show()
+
+
+
+  def translate(sentence):
+    result, sentence, attention_plot = evaluate(sentence)
+
+  print('Input: %s' % (sentence))
+  print('Predicted translation: {}'.format(result))
+
+  attention_plot = attention_plot[:len(result.split(' ')), :len(sentence.split(' '))]
+  plot_attention(attention_plot, sentence.split(' '), result.split(' '))
+
+"""
+  마지막 체크포인트(checkpoint)를 복원하고 테스트하기
+  # checkpoint_dir내에 있는 최근 체크포인트(checkpoint)를 복원합니다."""
+checkpoint.restore(tf.train.latest_checkpoint(checkpoint_dir))
+
+translate(u'거기 너 안녕.')
 
 
