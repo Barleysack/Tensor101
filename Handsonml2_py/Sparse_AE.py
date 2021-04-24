@@ -14,7 +14,24 @@ def plot_image(image):
   plt.imshow(image, cmap="binary")
   plt.axis("off")
 
+(X_train_full, y_train_full), (X_test, y_test) = keras.datasets.fashion_mnist.load_data() #MNIST 데이터 사용
+X_train_full = X_train_full.astype(np.float32) / 255
+X_test = X_test.astype(np.float32) / 255
+X_train, X_valid = X_train_full[:-5000], X_train_full[-5000:]
+y_train, y_valid = y_train_full[:-5000], y_train_full[-5000:]
 
+def rounded_accuracy(y_true, y_pred):
+    return keras.metrics.binary_accuracy(tf.round(y_true), tf.round(y_pred))
+
+def show_reconstructions(model, images=X_valid, n_images=5):
+    reconstructions = model.predict(images[:n_images])
+    fig = plt.figure(figsize=(n_images * 1.5, 3))
+    for image_index in range(n_images):
+        plt.subplot(2, n_images, 1 + image_index)
+        plot_image(images[image_index])
+        plt.subplot(2, n_images, 1 + n_images + image_index)
+        plot_image(reconstructions[image_index])
+    return plt.show()
 
 
 #코딩층에 시그모이드 활성화함수를 사용해 0과 1사이값으로 만들고 큰 코딩층을 만드는 것이다. 
