@@ -75,3 +75,5 @@ history = stacked_ae_1_by_1.fit(X_train, X_train, epochs=10,
 
 show_reconstructions(stacked_ae_1_by_1)
 plt.show()
+#다시 읽어보니 이때 이해 1도 못한듯.
+#세상에...책을 빌려와야한다.

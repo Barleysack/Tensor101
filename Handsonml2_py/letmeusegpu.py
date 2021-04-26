@@ -10,3 +10,4 @@ with tf.device('/GPU:0'):
 
 c = tf.matmul(a, b)
 print(c)
+#cuda makes problem, usually..

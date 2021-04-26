@@ -41,7 +41,7 @@ def show_reconstructions(model, images=X_valid, n_images=5):
         plt.subplot(2, n_images, 1 + n_images + image_index)
         plot_image(reconstructions[image_index])
     return
-
+#간만에 다시 읽으니 잘 읽히네...
 # 판별자의 풀링층을 스트라이드 합성곱으로 바꾸고 생성자의 풀링층은 트랜스포스...전치합성곱으로 바꿈.
 # 생성자와 판별자에 배치 정규화 활용. 생성자의 출력층과 판별자의 입력층은 제외.
 #층을 깊게 쌓기 위해 완전연결 은닉층은 제거.
