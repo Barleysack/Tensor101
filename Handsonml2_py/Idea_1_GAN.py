@@ -31,15 +31,7 @@ def rounded_accuracy(y_true, y_pred):
     return keras.metrics.binary_accuracy(tf.round(y_true), tf.round(y_pred))
 
 
-def show_reconstructions(model, images=X_valid, n_images=5):
-    reconstructions = model.predict(images[:n_images])
-    fig = plt.figure(figsize=(n_images * 1.5, 3))
-    for image_index in range(n_images):
-        plt.subplot(2, n_images, 1 + image_index)
-        plot_image(images[image_index])
-        plt.subplot(2, n_images, 1 + n_images + image_index)
-        plot_image(reconstructions[image_index])
-    return
+
 
 
 
