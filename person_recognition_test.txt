@@ -1,0 +1,36 @@
+
+Initializing HM01B0...
+
+Apollo3 Burst Mode is Available
+
+Apollo3 operating in Normal Mode (48MHz)
+
+Apollo3 operating in Burst Mode (96MHz)
+
+Person score: 186 No person score: 148
+Person score: 66 No person score: 233
+Person score: 84 No person score: 223
+Person score: 96 No person score: 217
+Person score: 207 No person score: 125
+Person score: 236 No person score: 67
+Person score: 240 No person score: 55
+Person score: 249 No person score: 45
+Person score: 249 No person score: 45
+Person score: 249 No person score: 43
+Person score: 242 No person score: 55
+Person score: 202 No person score: 121
+Person score: 181 No person score: 153
+Person score: 236 No person score: 73
+Person score: 170 No person score: 165
+Person score: 116 No person score: 207
+Person score: 189 No person score: 139
+Person score: 234 No person score: 72
+Person score: 229 No person score: 82
+Person score: 232 No person score: 73
+Person score: 54 No person score: 242
+Person score: 104 No person score: 213
+Person score: 102 No person score: 216
+Person score: 57 No person score: 242
+Person score: 72 No person score: 234
+Person score: 53 No person score: 244
+
