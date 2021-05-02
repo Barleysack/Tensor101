@@ -59,3 +59,10 @@ def create_huber(threshold=1.0):
     
 model.fit(X_train_scaled,y_train,epochs=1,
            validation_data=(X_valid_scaled,y_valid))
+
+
+model.compile(loss="sparse_categorical_crossentropy", optimizer="nadam", metrics=["accuracy"])
+history = model.fit(X_train, y_train, epochs=10, validation_data=(X_valid, y_valid))
+score = model.evaluate(X_test, y_test)
+X_new = X_test[:10] # pretend we have new images
+y_pred = model.predict(X_new)
