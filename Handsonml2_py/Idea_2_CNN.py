@@ -11,6 +11,10 @@ X_test = X_test.astype(np.float32) / 255
 X_train, X_valid = X_train_full[:-5000], X_train_full[-5000:]
 y_train, y_valid = y_train_full[:-5000], y_train_full[-5000:]
 
+print(y_train.shape)
+X_train_re= X_train.reshape(55000,28,28,1)
+X_valid_re= X_valid.reshape(5000,28,28,1)
+
 
 
 
@@ -33,13 +37,17 @@ model = keras.models.Sequential([
     keras.layers.Dropout(0.5),
     keras.layers.Dense(units=10, activation='softmax'),
 ])
+
+callback = tf.keras.callbacks.EarlyStopping(monitor='loss', patience=3)
+
 model.compile(loss="sparse_categorical_crossentropy", optimizer="nadam", metrics=["accuracy"])
-history = model.fit(X_train, y_train, epochs=10, validation_data=(X_valid, y_valid))
+history = model.fit(X_train_re, y_train, epochs=10, validation_data=(X_valid_re, y_valid),callbacks=[callback])
 score = model.evaluate(X_test, y_test)
 X_new = X_test[:10] # pretend we have new images
 y_pred = model.predict(X_new)
 
-#ValueError: Input 0 of layer sequential is incompatible with the layer: : expected min_ndim=4, found ndim=3. Full shape received: (None, 28, 28)
+#ValueError: Input 0 of layer sequential is incompatible with the layer: : 
+# expected min_ndim=4, found ndim=3. Full shape received: (None, 28, 28)
 
         
         
