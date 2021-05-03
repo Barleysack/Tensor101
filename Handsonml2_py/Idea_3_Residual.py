@@ -5,7 +5,7 @@ from tensorflow import keras
 from tensorflow.keras import layers
 from sklearn.preprocessing import StandardScaler
 import matplotlib.pyplot as plt
-  
+import tensorboard
 
 (X_train_full, y_train_full), (X_test, y_test) = keras.datasets.mnist.load_data()
 X_train_full = X_train_full.astype(np.float32) / 255
@@ -65,7 +65,8 @@ model = keras.models.Sequential([
     ResidualBlock(2, 30),
     keras.layers.Dense(1)
 ])
-
+tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir="./logs")
+callback=tensorboard_callback
 model.compile(loss="mse", optimizer="nadam")
-history = model.fit(X_train_scaled, y_train, epochs=5)
+history = model.fit(X_train_scaled, y_train, epochs=30 ,callbacks=callback)
   
