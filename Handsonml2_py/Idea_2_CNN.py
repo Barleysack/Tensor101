@@ -25,10 +25,10 @@ model = keras.models.Sequential([
     DefaultConv2D(filters=64, kernel_size=7, input_shape=[28, 28, 1]),
     keras.layers.MaxPooling2D(pool_size=2),
     DefaultConv2D(filters=128),
-    DefaultConv2D(filters=128),
+    
     keras.layers.MaxPooling2D(pool_size=2),
     DefaultConv2D(filters=256),
-    DefaultConv2D(filters=256),
+    
     
     keras.layers.Flatten(),
     keras.layers.Dense(units=128, activation='relu'),
