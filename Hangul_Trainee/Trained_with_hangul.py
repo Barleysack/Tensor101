@@ -18,7 +18,6 @@ base_dir= 'C:/Users/admin/Desktop/workspace/tensor101/data/'
 data_dir = tf.keras.utils.get_file(origin=base_dir, 
                                    fname='hangul', 
                                    )
-normalization_layer = tf.keras.layers.experimental.preprocessing.Rescaling(1./255)
     
 
 
