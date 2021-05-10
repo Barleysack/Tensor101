@@ -12,7 +12,13 @@ import pandas
 from tqdm import tqdm
 import matplotlib.pyplot as plt
 
+root_logdir = os.path.join(os.curdir, "my_logs")
+def get_run_logdir():
+    import time
+    run_id = time.strftime("run_%Y_%m_%d-%H_%M_%S")
+    return os.path.join(root_logdir, run_id)
 
+run_logdir = get_run_logdir()
 
 base_dir= 'C:/Users/admin/Desktop/workspace/tensor101/data/'
 data_dir = tf.keras.utils.get_file(origin=base_dir, 
@@ -109,10 +115,16 @@ model.compile(
   loss=tf.losses.SparseCategoricalCrossentropy(from_logits=True),
   metrics=['accuracy'])
 
+checkpoint_cb = keras.callbacks.ModelCheckpoint("hangulmodel.h5", save_best_only=True)
+
+
 model.fit(
   train_ds,
   batch_size=batch_size,
   validation_data=val_ds,
-  epochs=30
+  epochs=30,callbacks=checkpoint_cb
 )
+
+
+
 

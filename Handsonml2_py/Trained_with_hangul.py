@@ -14,7 +14,7 @@ import matplotlib.pyplot as plt
 
 
 
-base_dir= 'C:/Users/admin/Desktop/workspace/tensor101/data/'
+#base_dir= 'C:/Users/admin/Desktop/workspace/tensor101/data/'
 data_dir = tf.keras.utils.get_file(origin=base_dir, 
                                    fname='hangul', 
                                    )
