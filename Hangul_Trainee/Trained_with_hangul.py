@@ -12,13 +12,7 @@ import pandas
 from tqdm import tqdm
 import matplotlib.pyplot as plt
 
-root_logdir = os.path.join(os.curdir, "my_logs")
-def get_run_logdir():
-    import time
-    run_id = time.strftime("run_%Y_%m_%d-%H_%M_%S")
-    return os.path.join(root_logdir, run_id)
 
-run_logdir = get_run_logdir()
 
 base_dir= 'C:/Users/admin/Desktop/workspace/tensor101/data/'
 data_dir = tf.keras.utils.get_file(origin=base_dir, 
@@ -62,35 +56,6 @@ AUTOTUNE = tf.data.experimental.AUTOTUNE
 train_ds = train_ds.cache().prefetch(buffer_size=AUTOTUNE)
 val_ds = val_ds.cache().prefetch(buffer_size=AUTOTUNE)
 
-
-'''def _int64_feature(value):
-    """Wrapper for inserting int64 features into Example proto."""
-    if not isinstance(value, list):
-        value = [value]
-    return tf.train.Feature(int64_list=tf.train.Int64List(value=value))
-
-
-def _float_feature(value):
-    """Wrapper for inserting float features into Example proto."""
-    if not isinstance(value, list):
-        value = [value]
-    return tf.train.Feature(float_list=tf.train.FloatList(value=value))
-
-
-def _bytes_feature(value):
-    """Wrapper for inserting bytes features into Example proto."""
-    if not isinstance(value, list):
-        value = [value]
-    return tf.train.Feature(bytes_list=tf.train.BytesList(value=value))
-
-def image_example(imageString, label, name):
-    imageShape = tf.image.decode_jpeg(imageString).shape
-
-    feature = {
-          'image_raw': _bytes_feature(imageString), #이미지는 0~255의 3차원값들
-          'landmark_id': _int64_feature(label), #
-          'id':_bytes_feature(name) #이미지 이름
-      }'''
 
 
 num_classes = 30
