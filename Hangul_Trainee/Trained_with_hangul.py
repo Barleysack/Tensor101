@@ -2,8 +2,6 @@ import glob
 import os
 import pathlib
 import numpy as np
-import PIL
-import PIL.Image
 import tensorflow as tf
 import keras
 from tensorflow import keras
@@ -47,8 +45,6 @@ val_ds = tf.keras.preprocessing.image_dataset_from_directory(
   image_size=(img_height, img_width),
   batch_size=batch_size,color_mode='grayscale')
 
-##케라스에 데이터셋이 클래스가 나뉘어 들어가있지 않았다. 
-##직접 클래스가 나뉜 것을 넣어주었다. 
 class_names = train_ds.class_names
 AUTOTUNE = tf.data.experimental.AUTOTUNE
 
@@ -75,7 +71,7 @@ model = tf.keras.Sequential([
 ])
 
 model.compile(
-  optimizer='nadam',
+  optimizer='adam',
   loss=tf.losses.SparseCategoricalCrossentropy(from_logits=True),
   metrics=['accuracy'])
 
