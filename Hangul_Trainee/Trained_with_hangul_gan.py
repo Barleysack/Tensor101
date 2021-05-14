@@ -1,18 +1,58 @@
-import tensorflow as tf
+import glob
+import os
+import pathlib
 import numpy as np
-import matplotlib.pyplot as plt
-import math
+import tensorflow as tf
+import keras
 from tensorflow import keras
 from tensorflow.keras import layers
+import pandas
+from tensorflow.python.keras.backend import _to_tensor
+from tqdm import tqdm
+import matplotlib.pyplot as plt
+import tensorboard
+
+
+base_dir= 'C:/Users/admin/Desktop/workspace/tensor101/data/'
+data_dir = tf.keras.utils.get_file(origin=base_dir, 
+                                   fname='hangul', 
+                                   )
+    
 
 
 
 
-(X_train_full, y_train_full), (X_test, y_test) = keras.datasets.mnist.load_data()
-X_train_full = X_train_full.astype(np.float32) / 255
-X_test = X_test.astype(np.float32) / 255
-X_train, X_valid = X_train_full[:-5000], X_train_full[-5000:]
-y_train, y_valid = y_train_full[:-5000], y_train_full[-5000:]
+batch_size = 16
+img_height = 28
+img_width = 28
+
+
+train_ds = tf.keras.preprocessing.image_dataset_from_directory(
+  data_dir,labels='inferred', label_mode='int',
+  validation_split=0.2,
+  subset="training",
+  seed=123,
+  image_size=(img_height, img_width),
+  batch_size=batch_size,color_mode='grayscale')
+
+
+dtype=np.float32,
+
+val_ds = tf.keras.preprocessing.image_dataset_from_directory(
+  data_dir,labels='inferred' ,label_mode='int',
+  validation_split=0.2,
+  subset="validation",
+  seed=123,
+  image_size=(img_height, img_width),
+  batch_size=batch_size,color_mode='grayscale')
+
+class_names = train_ds.class_names
+AUTOTUNE = tf.data.experimental.AUTOTUNE
+
+train_ds = train_ds.cache().prefetch(buffer_size=AUTOTUNE)
+val_ds = val_ds.cache().prefetch(buffer_size=AUTOTUNE)
+
+
 
 def plot_multiple_images(images, n_cols=None):
     n_cols = n_cols or len(images)
@@ -79,19 +119,23 @@ discriminator = keras.models.Sequential([
     keras.layers.Flatten(),
     keras.layers.Dense(1, activation="relu")
 ])
-gan = keras.models.Sequential([generator, discrimin ator])
+gan = keras.models.Sequential([generator, discriminator])
 
 discriminator.compile(loss="binary_crossentropy", optimizer="rmsprop")
 discriminator.trainable = False
 gan.compile(loss="binary_crossentropy", optimizer="rmsprop")
  
  
-X_train_dcgan = X_train.reshape(-1, 28, 28, 1) * 2. - 1. # reshape and rescale
+"""X_train_dcgan = train_ds.reshape(-1, 28, 28, 1) * 2. - 1. # reshape and rescale
 #출력범위로 인해 스케일을 조정하고, 채널차원을 추가해야한다. reshape 메소드 학습 요망.
 batch_size = 32
 dataset = tf.data.Dataset.from_tensor_slices(X_train_dcgan)
 dataset = dataset.shuffle(1000)
-dataset = dataset.batch(batch_size, drop_remainder=True).prefetch(1)
+dataset = dataset.batch(batch_size, drop_remainder=True).prefetch(1)"""
+
+train_t_ds = To.Tensor
+train_gan(gan, train_t_ds, batch_size, codings_size)   
 
 
-train_gan(gan, dataset, batch_size, codings_size)   
+
+
