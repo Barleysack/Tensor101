@@ -16,8 +16,20 @@ base_dir= 'C:/Users/admin/Desktop/workspace/tensor101/data/'
 data_dir = tf.keras.utils.get_file(origin=base_dir, 
                                    fname='hangul', 
                                    )
-    
+ 
+"""
+X = []
+y = []
 
+for f in sorted(os.listdir(base_dir)):
+    if os.path.isdir(base_dir+f):
+        print(f"{f} is a target class")
+        for i in sorted(os.listdir(base_dir+f)):
+            print(f"{i} is an input image path")
+            X.append(base_dir+f+'/'+i)
+            y.append(f)
+print(X)
+print(y) 이렇게하면 저 편안하고 예쁜 메소드 못쓰고 고생해야할텐데 ㅠ 억덕혜 해야할까"""
 
 
 
@@ -27,7 +39,7 @@ img_width = 28
 
 
 train_ds = tf.keras.preprocessing.image_dataset_from_directory(
-  data_dir,labels='inferred', label_mode='int',
+  base_dir,labels='inferred', label_mode='int',
   validation_split=0.2,
   subset="training",
   seed=123,
@@ -38,7 +50,7 @@ train_ds = tf.keras.preprocessing.image_dataset_from_directory(
 
 
 val_ds = tf.keras.preprocessing.image_dataset_from_directory(
-  data_dir,labels='inferred' ,label_mode='int',
+  base_dir,labels='inferred' ,label_mode='int',
   validation_split=0.2,
   subset="validation",
   seed=123,
@@ -50,8 +62,7 @@ AUTOTUNE = tf.data.experimental.AUTOTUNE
 
 train_ds = train_ds.cache().prefetch(buffer_size=AUTOTUNE)
 val_ds = val_ds.cache().prefetch(buffer_size=AUTOTUNE)
-
-
+print(train_ds[1].np)
 
 num_classes = 30
 
