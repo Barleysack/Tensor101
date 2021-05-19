@@ -17,19 +17,6 @@ data_dir = tf.keras.utils.get_file(origin=base_dir,
                                    fname='hangul', 
                                    )
  
-"""
-X = []
-y = []
-
-for f in sorted(os.listdir(base_dir)):
-    if os.path.isdir(base_dir+f):
-        print(f"{f} is a target class")
-        for i in sorted(os.listdir(base_dir+f)):
-            print(f"{i} is an input image path")
-            X.append(base_dir+f+'/'+i)
-            y.append(f)
-print(X)
-print(y) 이렇게하면 저 편안하고 예쁜 메소드 못쓰고 고생해야할텐데 ㅠ 억덕혜 해야할까"""
 
 
 
@@ -89,17 +76,19 @@ model.compile(
 checkpoint_cb = keras.callbacks.ModelCheckpoint("hangulmodel.h5", save_best_only=True)
 
 
-"""model.fit(
+model.fit(
   train_ds,
   batch_size=batch_size,
   validation_data=val_ds,
   epochs=30,callbacks=checkpoint_cb
-)"""
+)
 x_array=[]
-y_array=[]
-for item in train_ds.as_numpy_iterator():
-  x_array.append(item)
-  
+y_array=[]#later add labels?
 
-print(x_array)
-tf.shape(x_array)
+for item in val_ds.as_numpy_iterator():
+  x_array.append(item)
+  model.predict(x_array)
+
+
+
+
