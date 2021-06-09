@@ -12,6 +12,7 @@
 
 
 Sparkfun 사의 Sparkfun Edge를 사용해서 한글 필사를 Non-Semantic한 방향으로 인식 가능하도록 시도중입니다.
+그를 위해 Tensorflow 2.x를 배우고, Handsonml2 교재를 통해 학습하였습니다.
 
 
 
