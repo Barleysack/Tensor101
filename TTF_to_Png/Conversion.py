@@ -48,7 +48,8 @@ for uni in tqdm(collections):
     for ttf in fonts:
         
         font = ImageFont.truetype(font = font_path + ttf, size = 100)
-        
+        #아 이거 트루타입 글꼴만 되네;
+        #한글 글꼴중 트루타입이 있나;
         x, y = font.getsize(unicodeChars)
         
         theImage = Image.new('RGB', (x + 3, y + 3), color='white')
