@@ -51,7 +51,7 @@ Sparkfun 사의 Sparkfun Edge를 사용해서 한글 필사를 Non-Semantic한 �
 ttf to png를 구현해보았으나 matplotlib의 문제인지 그림 파일이 깨졌습니다. 
 
 
-/210617 사용한 메소드가 truetype에만 사용 가능합니다. 한글 글꼴중 truetype은 많지 않습니다..
+
 
 
 
