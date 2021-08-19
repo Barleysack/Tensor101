@@ -48,7 +48,7 @@ Sparkfun 사의 Sparkfun Edge를 사용해서 한글 필사를 Non-Semantic한 �
 
 
 데이터의 양이 각 클래스당 30개로 적고, 필사이자 각 자모음별로 떨어져있어야 하기에 augmentation이나 ttf to png를 통한 데이터셋 강화가 필요합니다. 
-ttf to png를 구현해보았으나 matplotlib의 문제인지 그림 파일이 깨졌습니다. 
+ttf to png를 구현해보았으나 제 사용 미숙으로 그림 파일이 깨졌습니다. 시각화는 분명 마무리해야할 과제인 듯 합니다.
 
 
 
