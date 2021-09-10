@@ -1,4 +1,4 @@
-# Tensorflow 2.x를 활용한 Tensorflow Lite 프로젝트 레포지토리입니다.
+# Tensorflow 2.x를 활용한 Tensorflow Lite 프로젝트 레포지토리입니다
 
 
 
